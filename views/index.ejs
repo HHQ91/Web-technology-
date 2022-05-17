@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('./head.ejs'); %>
+</head>
+
+<body class="container">
+
+    <header>
+        <%- include('./header.ejs'); %>
+    </header>
+
+    <main>
+        <section>
+            <em>Find Your Lost Pet</em>
+            <h1 class="title">Lost your pet? let's help you to bring him back home asap!</h1>
+        </section>
+    </main>
+
+    <h3>Search your pet here</h3>
+    <div id='search-box'>
+        <div id='search-form'>
+            <input id='search-text' class="animalName" name='q' placeholder='Animal Name' type='text' />
+            <button id='search-button' onclick=search()><span>Search</span></button>
+        </div>
+    </div>
+    <div id="erroralert"></div>
+    <div id="BodyData"></div>
+    <!--SECTION2-->
+    <div class="section2">
+        <section>
+            <em>How it Works</em>
+            <p>Owners can report a missing pet and
+                then other people can report any possible sightings of said pet. all lost pets will be added to our database. Click on REPORT MISSING PETS and you can report new missing or see the most recent updates.</p>
+        </section>
+     
+    </div>
+
+    <div class="section3">
+        <section>
+            <span>
+                <img src="https://i.postimg.cc/tJ05FCJY/icon-4.png" alt="">
+                <p>(+44) 78 6345</p>
+            </span>
+            <span>
+                <img src="https://i.postimg.cc/bvBLNRj0/icon-5.png" alt="">
+                <p>support@petfinder.com</p>
+            </span>
+            <span>
+                <img src="https://i.postimg.cc/B6Pp81qr/icon-6.png" alt="">
+                <p>10 Ascupart Building Portswood Road<br> Southampton - UK</p>
+            </span>
+        </section>
+    </div>
+
+
+    <footer>
+        <p class="text-center text-muted">&copy; Hasan Al Qaysi 2022</p>
+    </footer>
+
+</body>
+<script>
+ function search() {
+
+    var name = document.getElementsByClassName("animalName")[0].value;
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+            var resObj = JSON.parse(this.responseText);
+              console.log(this.responseText);
+              if(this.responseText == "{}"){
+                document.getElementById("erroralert").innerHTML = "No Data !";
+                document.getElementById("BodyData").innerHTML = "";
+                return;
+              }else{
+             
+                if (this.status == 200 || this.status == 304) {
+                document.getElementById("erroralert").innerHTML = "";
+                    table = `<div class="list-content">
+            <h1>Missing Pet Search </h1>
+            <table class="table" id="pet">
+                <tr>
+                    <th>Name</th>
+                    <th>Animal</th>
+                    <th>description</th>
+                    <th>location</th>
+                  
+                </tr>
+             
+                    <tr>
+                        <td>
+                            `+ resObj.row.name + `
+                        </td>
+                        <td>
+                            `+ resObj.row.animal + `
+                        </td>
+                        <td>
+                            `+ resObj.row.description + `
+                        </td>
+                        <td>
+                            `+ resObj.row.location + `
+                        </td>
+                        
+                    </tr>
+                 
+            </table>
+
+        </div>`;
+                }
+                document.getElementById("BodyData").innerHTML = table;
+
+              }
+           
+
+            }
+        xhttp.open("GET", "api/reports/" + name);
+        xhttp.send();
+    }
+
+    
+   
+</script>
+
+</html>
