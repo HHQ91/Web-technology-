@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('./head.ejs'); %>
+</head>
+
+<body>
+
+    <header>
+        <%- include('./header.ejs'); %>
+    </header>
+
+
+    <div class="content">
+
+        <div class="edit-content">
+            <h1>Missing
+                <%= data.name %>
+            </h1>
+
+            <div class="input-group">
+                <label>Name : </label>
+                <input value="<%= data.name %>" placeholder="name of the pet" class="input name" />
+            </div>
+
+            <div class="input-group">
+                <label>Animal :</label>
+                <input value="<%= data.animal %>" class="input animal" />
+            </div>
+
+            <div class="input-group">
+                <label>Location :</label>
+                <input value="<%= data.location %>" class="input location" />
+            </div>
+
+            <div class="input-group">
+                <label>description :</label>
+                <textarea class="input description" placeholder=" A description of the animal that will help people recognise it"><%= data.description %></textarea>
+            </div>
+
+
+
+
+
+
+            <hr class="form-hr"></hr>
+            <div class="btn-group">
+                <a class="submit-btn" onclick="editPet('<%= data.id %>')">Edit Pet</a>
+                <a class="delete-btn" onclick="deletePet('<%= data.id %>')">Delete Pet</a>
+
+            </div>
+
+        </div>
+
+
+
+
+    </div>
+
+
+    <footer>
+        <%- include('./footer.ejs'); %>
+    </footer>
+
+</body>
+<script>
+    function deletePet(id) {
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+            var resObj = JSON.parse(this.responseText);
+
+            if (this.status == 200) {
+                window.location.href = "/reports";
+            }
+        }
+        xhttp.open("delete", "/api/report/" + id);
+        xhttp.send();
+    }
+
+    function editPet(id) {
+
+        var form = {
+            "name": document.getElementsByClassName("name")[0].value, // take value from the class name 
+            "animal": document.getElementsByClassName("animal")[0].value,
+            "description": document.getElementsByClassName("description")[0].value,
+            "location": document.getElementsByClassName("location")[0].value,
+        }
+        console.log(form);
+
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+            var resObj = JSON.parse(this.responseText);
+
+            if (this.status == 200) {
+                
+            }
+        }
+        xhttp.open("put", "/api/report/" + id);
+        xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhttp.send(JSON.stringify(form));
+
+    }
+</script>
+
+</html>

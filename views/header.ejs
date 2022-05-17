@@ -1,0 +1,54 @@
+
+<header class="header-area">
+    <div class="navbar-area">
+      <div class="container">
+        <nav class="site-navbar">    
+          <a href="#home" class="site-logo">Pet finder</a>
+          <ul>
+            <li>
+                <a href="/">Home</a>
+            </li>
+            <li>
+                <a href="/reports">report missing Pets</a>
+            </li>
+            <li>
+                <a href="/activity">Fun Activity</a>
+            </li>
+          </ul>
+          <button class="nav-toggler">
+            <span></span>
+          </button>
+        </nav>
+      </div>
+    </div>
+  </header>
+  <script>
+ 
+const navToggler = document.querySelector('.nav-toggler');
+const navMenu = document.querySelector('.site-navbar ul');
+const navLinks = document.querySelectorAll('.site-navbar a');
+
+
+allEventListners();
+
+
+function allEventListners() {
+
+  navToggler.addEventListener('click', togglerClick);
+
+  navLinks.forEach( elem => elem.addEventListener('click', navLinkClick));
+}
+
+
+function togglerClick() {
+  navToggler.classList.toggle('toggler-open');
+  navMenu.classList.toggle('open');
+}
+
+
+function navLinkClick() {
+  if(navMenu.classList.contains('open')) {
+    navToggler.click();
+  }
+}
+  </script>

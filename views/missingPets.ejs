@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('./head.ejs'); %>
+</head>
+
+<body class="container">
+
+    <header>
+        <%- include('./header.ejs'); %>
+    </header>
+
+    <div class="content">
+
+        <div class="add-content">
+            <h1>Add Missing Pet
+            </h1>
+            <div class="action_required"></div>
+            <div class="input-group">
+                <label>Name : </label>
+                <input value="" placeholder="name of the pet" class="input name" />
+            </div>
+            <div class="input-group">
+                <label>Animal :</label>
+                <input value="" placeholder="dog/cat/tortoise etc" class="input animal" />
+            </div>
+            <div class="input-group">
+                <label>Location :</label>
+                <input value="" placeholder="The name of the area
+                                from which the animal vanished" class="input
+                                location" />
+            </div>
+            <div class="input-group">
+                <label>description :</label>
+                <textarea class="input description" placeholder="A
+                                description of the animal that will help people
+                                recognise it"></textarea>
+            </div>
+            <a class="submit-btn" onclick="Add()">Add Pet</a>
+
+        </div>
+
+        <div class="list-content">
+            <h1>Missing Pets List </h1>
+            <table class="table" id="pet">
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Animal</th>
+                    <th>location</th>
+                    <th>Setting</th>
+                </tr>
+                <tbody id="BodyData">
+                    <tr>
+                        <td colspan="100%" class="text-center
+                                        text-danger">
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+
+
+    </div>
+
+
+    <footer>
+        <%- include('./footer.ejs'); %>
+    </footer>
+
+</body>
+<script>
+    getAll();
+
+    function getAll() {
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+            var resObj = JSON.parse(this.responseText);
+
+            if (this.status == 200) {
+                var table = "";
+                var j = 1;
+                for (let i = 0; i < resObj.rows.length; i++) {
+                    table += `<tr>
+    <td>
+        ` + j++ + `
+    </td>
+    <td>
+        ` + resObj.rows[i].name + `
+    </td>
+    <td>
+        ` + resObj.rows[i].animal + `
+    </td>
+ 
+    <td>
+        ` + resObj.rows[i].location + `
+    </td>
+    <td style="width: 201px;">
+                            <a class="show-more-btn" href="/report/`+ resObj.rows[i].id + `">Show </a>
+                            <a class="show-delete-btn" onclick="deletePet(' ` + resObj.rows[i].id + `')" >Delete Pet</a>
+                        </td>
+</tr>`;
+                }
+                document.getElementById("BodyData").innerHTML = table;
+
+            }
+
+
+        }
+        xhttp.open("GET", "/api/reports/");
+        xhttp.send();
+    }
+
+    function deletePet(id) {
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+            var resObj = JSON.parse(this.responseText);
+
+            if (this.status == 200) {
+                getAll();
+            }
+        }
+        xhttp.open("delete", "/api/report/"+ id);
+        xhttp.send();
+    }
+
+    function Add(id) {
+
+        var form = {
+            "name": document.getElementsByClassName("name")[0].value, // take value from the class name 
+            "animal": document.getElementsByClassName("animal")[0].value,
+            "description": document.getElementsByClassName("description")[0].value,
+            "location": document.getElementsByClassName("location")[0].value,
+        }
+        console.log(form);
+
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+            var resObj = JSON.parse(this.responseText);
+
+            if (this.status == 200) {
+                getAll();
+            }
+        }
+        xhttp.open("post", "api/report");
+        xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhttp.send(JSON.stringify(form));
+
+    }
+</script>
+
+</html>
